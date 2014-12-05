@@ -14,9 +14,19 @@ set :log_level, :info
 set :config_file,        'mackerel-agent.conf'
 set :remote_config_path, '/etc/mackerel-agent/mackerel-agent.conf'
 
-namespace :deploy do
 
+desc 'Report mackerel-agent process status'
+task :ps do
+  on roles(:server) do
+    info "Host #{host}:\n#{capture('ps -eo pid,comm,lstart,etime,time | grep mackerel-agent')}"
+  end
+end
+
+
+namespace :deploy do
   after :publishing, :restart
+  before :restart, :ps
+  after  :restart, :ps
 
   task :restart do
     on roles(:server) do
