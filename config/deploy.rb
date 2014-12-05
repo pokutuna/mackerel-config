@@ -24,9 +24,8 @@ end
 
 
 namespace :deploy do
+  after :starting, :ps
   after :publishing, :restart
-  before :restart, :ps
-  after  :restart, :ps
 
   task :restart do
     on roles(:server) do
