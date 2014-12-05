@@ -9,24 +9,15 @@ set :repo_url, 'git@github.com:pokutuna/mackerel-config.git'
 
 set :deploy_to, '/home/deploy/apps/mackerel-config'
 
-# Default value for :log_level is :debug
-# set :log_level, :debug
-
-
-
-# Default value for :linked_files is []
-# set :linked_files, fetch(:linked_files, []).push('config/database.yml')
-
-# Default value for linked_dirs is []
-# set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-
-# Default value for keep_releases is 5
-# set :keep_releases, 5
+set :log_level, :info
 
 set :config_file,        'mackerel-agent.conf'
 set :remote_config_path, '/etc/mackerel-agent/mackerel-agent.conf'
 
 namespace :deploy do
+
+  after :publishing, :restart
+
   task :restart do
     on roles(:server) do
       execute :sudo, 'service mackerel-agent restart'
