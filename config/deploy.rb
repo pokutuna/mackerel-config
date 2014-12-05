@@ -14,6 +14,8 @@ set :log_level, :info
 set :config_file,        'mackerel-agent.conf'
 set :remote_config_path, '/etc/mackerel-agent/mackerel-agent.conf'
 
+set :script_dir,         'scripts'
+set :remote_script_dir,  '/etc/mackerel-agent/scripts'
 
 desc 'Report mackerel-agent process status'
 task :ps do
@@ -38,6 +40,7 @@ namespace :setup do
   task :symlink do
     on roles(:server) do
       execute :sudo, "ln -fs #{release_path.join(fetch(:config_file))} #{fetch(:remote_config_path)}"
+      execute :sudo, "ln -fs #{release_path.join(fetch(:script_dir))} #{fetch(:remote_script_dir)}"
     end
   end
 end
